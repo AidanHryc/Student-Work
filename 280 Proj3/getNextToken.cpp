@@ -1,4 +1,5 @@
 #include "lex.h"
+
 Lex getNextToken(istream& in, int& linenum){
 	string lexeme = "";
 	bool inState = false;

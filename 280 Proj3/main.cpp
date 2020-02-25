@@ -1,8 +1,9 @@
 #include "parse.h"
 #include <fstream>
+#include <sstream>
 
 int main(int argc, char *argv[]){
-	int n = 1;
+	int n = 0;
 	int &lineNum = n;
 	ifstream file;
 	ifstream &f = file;
@@ -24,15 +25,29 @@ int main(int argc, char *argv[]){
 			exit(0);
 	}
 
-
+	bool isErr = false;
 	ParseTree *s = Prog(*stream, lineNum);
+	map<string, bool> id_map;
+	map<string, Val> symbols;
 
 	if(s){
-		s->checkId();
-		int bangs = s->BangCount();
-		cout << "BANG COUNT: " << bangs << endl;
-		int depth = s->MaxDepth(s);
-		cout << "MAX DEPTH: " << depth << endl;
+		isErr = s->CheckLetBeforeUse(id_map);
+
+		if(!isErr)
+			exit(0);
+
+		try{
+			s->Eval(symbols);
+		}
+		catch(runtime_error e){
+			cout << e.what() << endl;
+		}
 	}
 
+}
+
+void runtime_err(int lineNum, string msg){
+	std::ostringstream strBuild;
+	strBuild << "RUNTIME ERROR at " << lineNum << ": " << msg;
+	throw runtime_error(strBuild.str());
 }

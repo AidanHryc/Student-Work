@@ -64,7 +64,7 @@ ParseTree *Prog(istream& in, int& line){
 
 // Slist is a Statement followed by a Statement List
 //Slist := SC { Slist } | Stmt SC { Slist }
-ParseTree *Slist(istream& in, int& line) {		//Finished?
+ParseTree *Slist(istream& in, int& line) {
 	Lex t = Parser::GetNextToken(in, line);
 	ParseTree *s;
 
@@ -116,7 +116,7 @@ ParseTree *Stmt(istream& in, int& line) {
 
 
 //LetStmt := LET ID Expr
-ParseTree *LetStmt(istream& in, int& line) {	
+ParseTree *LetStmt(istream& in, int& line) {
 	Lex t = Parser::GetNextToken(in, line);
 
 	if(t == ID){
@@ -260,9 +260,9 @@ ParseTree *Prod(istream& in, int& line) {
 		}
 
 		if( t == STAR )
-			p1 = new PlusExpr(t.GetLinenum(), p1, p2);
+			p1 = new TimesExpr(t.GetLinenum(), p1, p2);
 		else
-			p1 = new MinusExpr(t.GetLinenum(), p1, p2);
+			p1 = new DivideExpr(t.GetLinenum(), p1, p2);
 	}
 
 }
@@ -310,4 +310,3 @@ ParseTree *Primary(istream& in, int& line) {
 	ParseError(line, "Primary expected");
 	return 0;
 }
-
